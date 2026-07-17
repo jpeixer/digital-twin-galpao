@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Digital Twin — Galpão Industrial 107×30 m — Viewer 3D interativo">
+  <title>Digital Twin — Galpão Industrial</title>
+  <link rel="stylesheet" href="./css/viewer.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="top-bar">
+      <h1>Galpão Industrial <span class="dim">107 × 30 m</span></h1>
+      <p class="hint">Arraste para girar · Scroll / pinça para zoom · Botão direito para deslocar</p>
+    </header>
+
+    <div id="canvas-wrap">
+      <canvas id="viewer-canvas"></canvas>
+      <div id="loading" class="loading" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Carregando modelo…</p>
+      </div>
+      <div id="error-banner" class="error-banner hidden" role="alert"></div>
+    </div>
+
+    <footer class="tool-bar">
+      <button type="button" id="btn-reset" class="tool-btn" title="Vista inicial">Vista inicial</button>
+      <button type="button" id="btn-top" class="tool-btn" title="Vista de topo">Topo</button>
+      <button type="button" id="btn-grid" class="tool-btn" title="Alternar grade">Grade</button>
+      <span class="spacer"></span>
+      <span id="fps" class="badge" aria-hidden="true"></span>
+    </footer>
+  </div>
+
+  <script type="module" src="./js/viewer.js"></script>
+</body>
+</html>

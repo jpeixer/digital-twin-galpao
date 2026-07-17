@@ -1,0 +1,76 @@
+:root {
+  --bg: #0e1116;
+  --panel: rgba(18, 22, 29, 0.82);
+  --stroke: rgba(255, 255, 255, 0.10);
+  --text: #e8ecf1;
+  --muted: #9aa4b2;
+  --accent: #4ea1ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+
+.top-bar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+  padding: 14px 18px calc(28px + env(safe-area-inset-top));
+  background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0));
+  pointer-events: none;
+}
+.top-bar h1 { font-size: 17px; font-weight: 600; letter-spacing: .2px; }
+.top-bar h1 .dim { color: var(--accent); font-weight: 500; margin-left: 6px; }
+.top-bar .hint { margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+#canvas-wrap { position: relative; flex: 1; min-height: 0; }
+#viewer-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.loading {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+  background: var(--bg); color: var(--muted); font-size: 13px;
+  transition: opacity .4s ease; z-index: 4;
+}
+.loading.hidden { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.14); border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-banner {
+  position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%);
+  max-width: 90%; padding: 10px 16px; border-radius: 10px;
+  background: #3a1113; border: 1px solid #7a2b2f; color: #ffd9db;
+  font-size: 13px; z-index: 6;
+}
+.error-banner.hidden { display: none; }
+
+.tool-bar {
+  position: relative; z-index: 5; display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(0deg, rgba(0,0,0,0.55), rgba(0,0,0,0));
+}
+.tool-btn {
+  appearance: none; border: 1px solid var(--stroke); background: var(--panel);
+  color: var(--text); font-size: 13px; font-weight: 500;
+  padding: 9px 14px; border-radius: 10px; cursor: pointer;
+  backdrop-filter: blur(8px); transition: border-color .15s, background .15s;
+}
+.tool-btn:hover { border-color: var(--accent); }
+.tool-btn:active { background: rgba(78,161,255,0.18); }
+.tool-btn.off { opacity: 0.5; }
+.spacer { flex: 1; }
+.badge {
+  font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums;
+  padding: 4px 8px; border-radius: 8px; border: 1px solid var(--stroke);
+}
