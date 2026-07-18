@@ -38,6 +38,12 @@ controls.dampingFactor = 0.06;
 controls.maxPolarAngle = Math.PI * 0.495; // don't go under the ground
 controls.minDistance = 8;
 controls.maxDistance = 700;
+// pan com o botão do meio (clique do scroll); botão direito também faz pan
+controls.mouseButtons = {
+  LEFT: THREE.MOUSE.ROTATE,
+  MIDDLE: THREE.MOUSE.PAN,
+  RIGHT: THREE.MOUSE.PAN,
+};
 
 // ---- Lights ----
 const hemi = new THREE.HemisphereLight(0xbfd4ea, 0x4a4438, 1.1);
