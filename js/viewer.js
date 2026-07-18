@@ -116,7 +116,7 @@ function frameObject(obj) {
   const dist = radius / Math.tan((camera.fov * Math.PI) / 360) * 1.5;
 
   homeTarget.set(center.x, size.y * 0.35, center.z);
-  homePos.set(center.x + dist * 0.8, size.y * 1.4 + dist * 0.25, center.z + dist * 0.8);
+  homePos.set(center.x - dist * 0.8, size.y * 1.4 + dist * 0.25, center.z - dist * 0.8);
 
   sun.target.position.copy(homeTarget);
   grid.position.set(center.x, 0, center.z);
