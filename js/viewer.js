@@ -21,8 +21,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // ---- Scene + sky ----
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x8fb2d4);
-scene.fog = new THREE.Fog(0x8fb2d4, 260, 620);
+scene.background = new THREE.Color(0x8fb2d4); // fallback atrás do sky dome
 
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -62,7 +61,7 @@ sun.shadow.bias = -0.0002;
 scene.add(sun);
 scene.add(sun.target);
 
-// ---- Ground + grid ----
+// ---- Ground (só sombras; sem grade) ----
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(2000, 2000),
   new THREE.ShadowMaterial({ opacity: 0.28 })
@@ -70,11 +69,6 @@ const ground = new THREE.Mesh(
 ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = true;
 scene.add(ground);
-
-const grid = new THREE.GridHelper(600, 120, 0x3a4656, 0x2a333f);
-grid.material.transparent = true;
-grid.material.opacity = 0.5;
-scene.add(grid);
 
 // ---- Load model ----
 let modelCenter = new THREE.Vector3();
@@ -119,10 +113,35 @@ function frameObject(obj) {
   homePos.set(center.x - dist * 0.8, size.y * 1.4 + dist * 0.25, center.z - dist * 0.8);
 
   sun.target.position.copy(homeTarget);
-  grid.position.set(center.x, 0, center.z);
   ground.position.set(center.x, 0, center.z);
 
+  loadSkyDome(center);
   resetView();
+}
+
+// ---- Sky dome (assets/sky_dome_demo.glb: semiesfera unitária com céu baked) ----
+function loadSkyDome(center) {
+  loader.load("./assets/sky_dome_demo.glb", (gltf) => {
+    const dome = gltf.scene;
+    dome.traverse((o) => {
+      if (o.isMesh) {
+        const map = o.material && o.material.map ? o.material.map : null;
+        o.material = new THREE.MeshBasicMaterial({
+          map: map,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+          toneMapped: false,
+        });
+        o.castShadow = false;
+        o.receiveShadow = false;
+        o.renderOrder = -1; // atrás de tudo
+        o.frustumCulled = false;
+      }
+    });
+    dome.scale.setScalar(900); // raio 1 -> 900 m
+    dome.position.set(center.x, -1, center.z);
+    scene.add(dome);
+  }, undefined, (err) => console.warn("sky dome não carregou:", err));
 }
 
 function resetView() {
@@ -141,11 +160,6 @@ function topView() {
 // ---- UI ----
 document.getElementById("btn-reset").addEventListener("click", resetView);
 document.getElementById("btn-top").addEventListener("click", topView);
-const gridBtn = document.getElementById("btn-grid");
-gridBtn.addEventListener("click", () => {
-  grid.visible = !grid.visible;
-  gridBtn.classList.toggle("off", !grid.visible);
-});
 
 // ---- Resize ----
 function resize() {
